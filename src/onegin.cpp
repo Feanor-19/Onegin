@@ -7,11 +7,11 @@
 
 #define MAX_NUMBER_OF_LINES 100
 
-ReadFile read_file(const char *file_name, ErrorCodes *err)
+TextFromFile read_text_from_file(const char *file_name, ErrorCodes *err)
 {
     assert(file_name);
 
-    ReadFile read_file = {};
+    TextFromFile read_file = {};
 
     off_t file_size = get_file_size(file_name);
     if (file_size == -1) {
@@ -129,7 +129,7 @@ void realloc_text(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p
     *text_p = new_text;
 }
 
-void print_file_text( ReadFile file )
+void print_file_text( TextFromFile file )
 {
     printf("Here is the text in file %s:\n", file.name);
 

@@ -11,9 +11,9 @@ int main()
     printf("Entered file name: <%s>\n", file_name);
 
     ErrorCodes err = ERROR_NO;
-    ReadFile file = read_file(file_name, &err); // какого фига не работает без второго аргумента по умолч
+    TextFromFile text = read_text_from_file(file_name, &err); // какого фига не работает без второго аргумента по умолч
 
-    if (err == ERROR_NO) print_file_text(file);
+    if (err == ERROR_NO) print_file_text(text);
     else printf("Some error occured!\n");
 
     return 0;

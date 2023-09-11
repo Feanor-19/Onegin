@@ -14,7 +14,7 @@ enum ErrorCodes
     ERROR_READ_FILE,
 };
 
-struct ReadFile
+struct TextFromFile
 {
     const char *name = NULL;
     char **text = NULL;         //< массив строк, из которых состоял текст файла
@@ -29,7 +29,7 @@ struct Text
 
 //---
 
-ReadFile read_file(const char *file_name, ErrorCodes *err = NULL);
+TextFromFile read_text_from_file(const char *file_name, ErrorCodes *err = NULL);
 
 char *read_file_to_buf(const char *file_name, off_t file_size, ErrorCodes *err);
 
@@ -39,7 +39,7 @@ void destroy_Text(Text *text);
 
 void realloc_text(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p);
 
-void print_file_text( ReadFile file );
+void print_file_text( TextFromFile file );
 
 off_t get_file_size(const char *file_name);
 
