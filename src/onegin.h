@@ -6,6 +6,14 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+enum ErrorCodes
+{
+    ERROR_NO,
+    ERROR_FILE_SIZE,
+    ERROR_OPEN_FILE,
+    ERROR_READ_FILE,
+};
+
 struct ReadFile
 {
     const char *name = NULL;
@@ -15,7 +23,7 @@ struct ReadFile
 
 //---
 
-ReadFile read_file(const char *file_name);
+ReadFile read_file(const char *file_name, ErrorCodes *err = NULL);
 
 void print_file_text( ReadFile file );
 

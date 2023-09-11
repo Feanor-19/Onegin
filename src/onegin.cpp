@@ -7,22 +7,31 @@
 
 #define MAX_NUMBER_OF_LINES 100
 
-ReadFile read_file(const char *file_name)
+ReadFile read_file(const char *file_name, ErrorCodes *err)
 {
     assert(file_name);
 
     ReadFile read_file = {};
 
     off_t file_size = get_file_size(file_name);
-    if (file_size == -1) return read_file; //!!! TODO ERORR CODES !!!
+    if (file_size == -1) {
+        *err = ERROR_FILE_SIZE;
+        return read_file;
+    }
 
     char *buf = (char *) calloc( file_size + 1, sizeof(char) );
 
     FILE *file_p = fopen(file_name, "r");
-    if (file_p == NULL) return read_file; //!!! TODO ERORR CODES !!!
+    if (file_p == NULL) {
+        *err = ERROR_OPEN_FILE;
+        return read_file;
+    }
 
     fread(buf, sizeof(char), file_size, file_p);
-    //!!! TODO FEOF FERROR !!!
+    if ( ferror(file_p) != 0 )
+    {
+        *err = ERROR_READ_FILE;
+    }
 
     fclose(file_p);
     file_p = NULL;
@@ -86,10 +95,6 @@ char *read_line(FILE *stream)
 
     size_t curr_size = START_STR_SIZE;
     size_t read_bytes = my_getline(&str, &curr_size, stream);
-
-    //printf("! read_bytes = %u\n", read_bytes);
-
-    //printf("!!! %d, %d\n", str[read_bytes - 2], str[read_bytes - 1]);
 
     if ( str[read_bytes - 2] == '\n' ) str[read_bytes - 2] = '\0';
 
