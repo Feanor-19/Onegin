@@ -21,9 +21,23 @@ struct ReadFile
     unsigned long nLines = 0;   //< кол-во строк в файле, aka размер text[]
 };
 
+struct Text
+{
+    char **text;
+    size_t nLines;
+};
+
 //---
 
 ReadFile read_file(const char *file_name, ErrorCodes *err = NULL);
+
+char *read_file_to_buf(const char *file_name, off_t file_size, ErrorCodes *err);
+
+Text *parse_buf_to_text(char *buf, off_t file_size);
+
+void destroy_Text(Text *text);
+
+void realloc_text(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p);
 
 void print_file_text( ReadFile file );
 

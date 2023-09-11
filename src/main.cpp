@@ -14,6 +14,7 @@ int main()
     ReadFile file = read_file(file_name, &err); // какого фига не работает без второго аргумента по умолч
 
     if (err == ERROR_NO) print_file_text(file);
+    else printf("Some error occured!\n");
 
     return 0;
 }
