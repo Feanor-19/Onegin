@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include <stdint.h>
 
 #include "mystring.h"
 
@@ -168,4 +169,105 @@ char *read_line(FILE *stream)
     if ( str[read_bytes - 2] == '\n' ) str[read_bytes - 2] = '\0';
 
     return str;
+}
+
+//--- sorting
+
+void my_sort(   void *arr,
+                size_t n_memb,
+                size_t memb_size,
+                size_t left,
+                size_t rigth,
+                int (*cmp)(const void *, const void *) )
+{
+
+}
+
+size_t partition( void *arr, size_t n_memb, size_t memb_size, size_t left, size_t rigth)
+{
+
+}
+
+void swap( void *a, void *b, size_t memb_size )
+{
+    assert(a);
+    assert(b);
+
+    size_t left_bytes = memb_size;
+
+    while ( left_bytes >= sizeof(int64_t) )
+    {
+        int64_t buf = *( (int64_t *) a );
+        *( (int64_t *) a ) = *( (int64_t *) b );
+        *( (int64_t *) b ) = buf;
+
+        a = ( (int64_t *) a ) + 1;
+        b = ( (int64_t *) b ) + 1;
+
+        left_bytes -= sizeof(int64_t);
+    }
+
+    while ( left_bytes >= sizeof(int32_t) )
+    {
+        int32_t buf = *( (int32_t *) a );
+        *( (int32_t *) a ) = *( (int32_t *) b );
+        *( (int32_t *) b ) = buf;
+
+        a = ( (int32_t *) a ) + 1;
+        b = ( (int32_t *) b ) + 1;
+
+        left_bytes -= sizeof(int32_t);
+    }
+
+    while ( left_bytes >= sizeof(int16_t) )
+    {
+        int16_t buf = *( (int16_t *) a );
+        *( (int16_t *) a ) = *( (int16_t *) b );
+        *( (int16_t *) b ) = buf;
+
+        a = ( (int16_t *) a ) + 1;
+        b = ( (int16_t *) b ) + 1;
+
+        left_bytes -= sizeof(int16_t);
+    }
+
+    while ( left_bytes >= sizeof(int8_t) )
+    {
+        int8_t buf = *( (int8_t *) a );
+        *( (int8_t *) a ) = *( (int8_t *) b );
+        *( (int8_t *) b ) = buf;
+
+        a = ( (int8_t *) a ) + 1;
+        b = ( (int8_t *) b ) + 1;
+
+        left_bytes -= sizeof(int8_t);
+    }
+
+    while ( left_bytes >= sizeof(char) )
+    {
+        char buf = *( (char *) a );
+        *( (char *) a ) = *( (char *) b );
+        *( (char *) b ) = buf;
+
+        a = ( (char *) a ) + 1;
+        b = ( (char *) b ) + 1;
+
+        left_bytes -= sizeof(char);
+    }
+
+}
+
+int line_start_cmp( const void *line1, const void *line2 )
+{
+
+}
+
+void print_my_sort( void *arr,
+                    size_t n_memb,
+                    size_t memb_size,
+                    size_t left,
+                    size_t right,
+                    PrintSortTypes type)
+{
+
 }
