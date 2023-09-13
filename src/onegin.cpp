@@ -6,8 +6,6 @@
 
 #include "mystring.h"
 
-#define MAX_NUMBER_OF_LINES 100
-
 TextFromFile read_text_from_file(const char *file_name, ErrorCodes *err)
 {
     assert(file_name);
@@ -188,6 +186,22 @@ size_t partition( void *arr, size_t n_memb, size_t memb_size, size_t left, size_
 
 }
 
+/*
+    define ниже нужен только для swap, и это мотивация объявить его именно здесь
+*/
+
+#define swap__(__type__) while ( left_bytes >= sizeof(__type__) )    \
+    {                                                           \
+        __type__ buf = *( (__type__ *) a );                       \
+        *( (__type__ *) a ) = *( (__type__ *) b );                \
+        *( (__type__ *) b ) = buf;                               \
+                                                                \
+        a = ( (__type__ *) a ) + 1;                              \
+        b = ( (__type__ *) b ) + 1;                              \
+                                                                \
+        left_bytes -= sizeof(__type__);                          \
+    }
+
 void swap( void *a, void *b, size_t memb_size )
 {
     assert(a);
@@ -195,65 +209,15 @@ void swap( void *a, void *b, size_t memb_size )
 
     size_t left_bytes = memb_size;
 
-    while ( left_bytes >= sizeof(int64_t) )
-    {
-        int64_t buf = *( (int64_t *) a );
-        *( (int64_t *) a ) = *( (int64_t *) b );
-        *( (int64_t *) b ) = buf;
+    swap__(int64_t);
 
-        a = ( (int64_t *) a ) + 1;
-        b = ( (int64_t *) b ) + 1;
+    swap__(int32_t);
 
-        left_bytes -= sizeof(int64_t);
-    }
+    swap__(int16_t);
 
-    while ( left_bytes >= sizeof(int32_t) )
-    {
-        int32_t buf = *( (int32_t *) a );
-        *( (int32_t *) a ) = *( (int32_t *) b );
-        *( (int32_t *) b ) = buf;
+    swap__(int8_t);
 
-        a = ( (int32_t *) a ) + 1;
-        b = ( (int32_t *) b ) + 1;
-
-        left_bytes -= sizeof(int32_t);
-    }
-
-    while ( left_bytes >= sizeof(int16_t) )
-    {
-        int16_t buf = *( (int16_t *) a );
-        *( (int16_t *) a ) = *( (int16_t *) b );
-        *( (int16_t *) b ) = buf;
-
-        a = ( (int16_t *) a ) + 1;
-        b = ( (int16_t *) b ) + 1;
-
-        left_bytes -= sizeof(int16_t);
-    }
-
-    while ( left_bytes >= sizeof(int8_t) )
-    {
-        int8_t buf = *( (int8_t *) a );
-        *( (int8_t *) a ) = *( (int8_t *) b );
-        *( (int8_t *) b ) = buf;
-
-        a = ( (int8_t *) a ) + 1;
-        b = ( (int8_t *) b ) + 1;
-
-        left_bytes -= sizeof(int8_t);
-    }
-
-    while ( left_bytes >= sizeof(char) )
-    {
-        char buf = *( (char *) a );
-        *( (char *) a ) = *( (char *) b );
-        *( (char *) b ) = buf;
-
-        a = ( (char *) a ) + 1;
-        b = ( (char *) b ) + 1;
-
-        left_bytes -= sizeof(char);
-    }
+    swap__(char);
 
 }
 
