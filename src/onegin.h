@@ -66,6 +66,7 @@ size_t partition(   void *arr,
                     size_t memb_size,
                     size_t left,
                     size_t right,
+                    int *any_swaps_done,
                     int (*cmp)(const void *, const void *) );
 
 // использовать что-то типа in32_t как буфер, и копировать через него

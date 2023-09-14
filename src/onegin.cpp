@@ -198,12 +198,30 @@ void my_sort(   void *arr,
     }
     else
     {
+        int any_swaps_done = 0;
+
         printf("Entering partition...\n");
-        size_t mid = partition(arr, n_memb, memb_size, left, right, cmp);
+        size_t mid = partition(arr, n_memb, memb_size, left, right, &any_swaps_done, cmp);
         printf("Left partition\n");
 
-        if ( mid   - left      > 0 ) my_sort(arr, n_memb, memb_size, left, mid, cmp);
-        if ( right - (mid + 1) > 0 ) my_sort(arr, n_memb, memb_size, mid + 1, right, cmp);
+        if (!any_swaps_done)
+        {
+            printf("No swaps were done during partition. I guess no sorting is necessary.\n");
+            return;
+        }
+
+        if ( mid   - left      > 0 )
+        {
+            printf("!Entering sorting from index %u to index %u\n", left, mid);
+            my_sort(arr, n_memb, memb_size, left, mid, cmp);
+            printf("!Leaving sorting from index %u to index %u\n", left, mid);
+        }
+        if ( right - (mid + 1) > 0 )
+        {
+            printf("@Entering sorting from index %u to index %u\n", mid + 1, right);
+            my_sort(arr, n_memb, memb_size, mid + 1, right, cmp);
+            printf("@Leaving sorting from index %u to index %u\n", mid + 1, right);
+        }
     }
 
 }
@@ -213,6 +231,7 @@ size_t partition(   void *arr,
                     size_t memb_size,
                     size_t left,
                     size_t right,
+                    int *any_swaps_done,
                     int (*cmp)(const void *, const void *) )
 {
     assert(arr);
@@ -248,11 +267,18 @@ size_t partition(   void *arr,
         }
 
         swap( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size), memb_size );
+        printf("Swap done: at index %u exchanged with at index %u\n", left, right);
+        *any_swaps_done = 1;
 
         print_my_sort_int((int *) arr, n_memb, left, right, middle);
 
         if (left  == middle) middle = right;
-        if (right == middle) middle = left;
+        else if (right == middle) middle = left;
+
+        print_my_sort_int((int *) arr, n_memb, left, right, middle);
+
+        left++;
+        right--;
 
         print_my_sort_int((int *) arr, n_memb, left, right, middle);
 

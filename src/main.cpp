@@ -20,11 +20,11 @@ int main()
     else printf("Some error occured!\n");
     */
 
-   /*
+
     int arr[] = { 5, 2, 15, 3, 1, 16, 10, 5, 10, 3, 4, 12, 6, 6, 22, 20 };
     size_t arr_len = sizeof(arr)/sizeof(arr[0]);
     my_sort(arr, arr_len, sizeof(arr[0]), 0, arr_len - 1, cmp_int);
-    */
+
 
     /*
     //print sort test
