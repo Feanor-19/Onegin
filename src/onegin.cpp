@@ -171,19 +171,76 @@ char *read_line(FILE *stream)
 
 //--- sorting
 
+inline void *get_elem_pnt(size_t ind, void *arr, size_t memb_size)
+{
+    return (void *) (( (char *) arr ) + memb_size*ind);
+}
+
 void my_sort(   void *arr,
                 size_t n_memb,
                 size_t memb_size,
                 size_t left,
-                size_t rigth,
+                size_t right,
                 int (*cmp)(const void *, const void *) )
 {
+    assert(arr);
+    assert(cmp);
+
+    if (right - left == 1) // простой частный случай
+    {
+        if ( cmp( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) > 0 )
+        {
+            swap( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size), memb_size );
+        }
+    }
+    else
+    {
+        size_t mid = partition(arr, memb_size, left, right, cmp);
+
+        if ( mid   - left      > 0 ) my_sort(arr, n_memb, memb_size, left, mid, cmp);
+        if ( right - (mid + 1) > 0 ) my_sort(arr, n_memb, memb_size, mid + 1, right, cmp);
+    }
 
 }
 
-size_t partition( void *arr, size_t n_memb, size_t memb_size, size_t left, size_t rigth)
+size_t partition(   void *arr,
+                    size_t memb_size,
+                    size_t left,
+                    size_t right,
+                    int (*cmp)(const void *, const void *) )
 {
+    assert(arr);
 
+    size_t middle = (right + left) / 2;
+
+    while( left < right )
+    {
+        while ( cmp( get_elem_pnt(left, arr, memb_size), get_elem_pnt(middle, arr, memb_size) ) < 0 )
+        {
+            left++;
+
+            if (left == right)
+            {
+                return left;
+            }
+        }
+
+        while ( cmp( get_elem_pnt(middle, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) < 0 )
+        {
+            right--;
+
+            if ( left == right )
+            {
+                return left;
+            }
+        }
+
+        swap( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size), memb_size );
+
+        if (left  == middle) middle = right;
+        if (right == middle) middle = left;
+
+    }
 }
 
 /*
@@ -226,12 +283,55 @@ int line_start_cmp( const void *line1, const void *line2 )
 
 }
 
-void print_my_sort( void *arr,
-                    size_t n_memb,
-                    size_t memb_size,
-                    size_t left,
-                    size_t right,
-                    PrintSortTypes type)
+void print_my_sort_int( int *arr,
+                        size_t n_memb,
+                        size_t left,
+                        size_t right,
+                        size_t middle)
 {
+    assert(arr);
 
+    size_t width = find_maximum_elem_width(arr, n_memb);
+
+    printf("%*c%*c%*c\n",   (width)*(left+1)         + left,            '<',
+                            (width)*(middle - left)  + middle - left,   'm',
+                            (width)*(right - middle) + right - middle,  '>');
+
+    for (size_t ind = 0; ind < n_memb; ind++)
+    {
+        printf("%*d ", width, arr[ind]);
+    }
+    printf("\n");
+}
+
+size_t find_maximum_elem_width(const int *arr, size_t n_memb)
+{
+    assert(arr != NULL);
+
+    size_t ans = 0;
+    for (size_t ind = 0; ind < n_memb; ind++)
+    {
+        size_t res = find_num_width( arr[ind] );
+        if (res > ans) ans = res;
+    }
+    return ans;
+}
+
+size_t find_num_width(int num)
+{
+    size_t res = 0;
+
+    if (num < 0)
+    {
+        res++;
+        num = -num;
+    }
+
+    while( num > 0 )
+    {
+        res++;
+        num = num/10;
+    }
+
+    return res;
 }

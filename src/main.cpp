@@ -18,10 +18,19 @@ int main()
     else printf("Some error occured!\n");
     */
 
-    char str1[10] = "hello";
-    char str2[10] = "world";
-    swap( str1, str2, sizeof(char)*10 );
-    printf("after swap a = %s, b = %s\n", str1, str2);
+    /*print sort test
+    int arr[] = { 1, 2, 3, 19, 5, 6, 755, 8, 9 };
+    print_my_sort_int( arr, sizeof(arr)/sizeof(arr[0]), 2, 6, 4 );
+
+    arr[2] = 755;
+    arr[6] = 3;
+
+    print_my_sort_int( arr, sizeof(arr)/sizeof(arr[0]), 3, 7, 5 );
+
+    swap(arr + 2, arr + 5, sizeof(int));
+
+    print_my_sort_int( arr, sizeof(arr)/sizeof(arr[0]), 3, 7, 5 );
+    */
 
     return 0;
 }
