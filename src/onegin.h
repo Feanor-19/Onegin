@@ -62,6 +62,7 @@ void my_sort(   void *arr,
                 int (*cmp)(const void *, const void *) );
 
 size_t partition(   void *arr,
+                    size_t n_memb,
                     size_t memb_size,
                     size_t left,
                     size_t right,

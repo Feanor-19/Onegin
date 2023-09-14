@@ -191,11 +191,16 @@ void my_sort(   void *arr,
         if ( cmp( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) > 0 )
         {
             swap( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size), memb_size );
+
+            printf("Simple swap case\n");
+            print_my_sort_int((int *) arr, n_memb, left, right, n_memb+1);
         }
     }
     else
     {
-        size_t mid = partition(arr, memb_size, left, right, cmp);
+        printf("Entering partition...\n");
+        size_t mid = partition(arr, n_memb, memb_size, left, right, cmp);
+        printf("Left partition\n");
 
         if ( mid   - left      > 0 ) my_sort(arr, n_memb, memb_size, left, mid, cmp);
         if ( right - (mid + 1) > 0 ) my_sort(arr, n_memb, memb_size, mid + 1, right, cmp);
@@ -204,6 +209,7 @@ void my_sort(   void *arr,
 }
 
 size_t partition(   void *arr,
+                    size_t n_memb,
                     size_t memb_size,
                     size_t left,
                     size_t right,
@@ -211,7 +217,9 @@ size_t partition(   void *arr,
 {
     assert(arr);
 
-    size_t middle = (right + left) / 2;
+    size_t middle = (right + left) / 2 + 1;
+
+    print_my_sort_int((int *) arr, n_memb, left, right, middle);
 
     while( left < right )
     {
@@ -223,6 +231,8 @@ size_t partition(   void *arr,
             {
                 return left;
             }
+
+            print_my_sort_int((int *) arr, n_memb, left, right, middle);
         }
 
         while ( cmp( get_elem_pnt(middle, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) < 0 )
@@ -233,12 +243,18 @@ size_t partition(   void *arr,
             {
                 return left;
             }
+
+            print_my_sort_int((int *) arr, n_memb, left, right, middle);
         }
 
         swap( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size), memb_size );
 
+        print_my_sort_int((int *) arr, n_memb, left, right, middle);
+
         if (left  == middle) middle = right;
         if (right == middle) middle = left;
+
+        print_my_sort_int((int *) arr, n_memb, left, right, middle);
 
     }
 }
@@ -283,6 +299,11 @@ int line_start_cmp( const void *line1, const void *line2 )
 
 }
 
+inline void put_n_spaces(size_t n)
+{
+    while(n--) putchar(' ');
+}
+
 void print_my_sort_int( int *arr,
                         size_t n_memb,
                         size_t left,
@@ -293,14 +314,53 @@ void print_my_sort_int( int *arr,
 
     size_t width = find_maximum_elem_width(arr, n_memb);
 
-    printf("%*c%*c%*c\n",   (width)*(left+1)         + left,            '<',
-                            (width)*(middle - left)  + middle - left,   'm',
-                            (width)*(right - middle) + right - middle,  '>');
+    size_t curr_space = 0;
+    for (size_t ind = 0; ind < n_memb; ind++)
+    {
+        curr_space = width + 5;
+        if (ind == left)    curr_space--;
+        if (ind == right)   curr_space--;
+        if (ind == middle)  curr_space-=2;
+
+        curr_space -= find_num_width(arr[ind]);
+        put_n_spaces(curr_space);
+
+        if (ind == left)    putchar('<');
+        if (ind == middle)  putchar('[');
+        printf("%d", arr[ind]);
+        if (ind == middle)  putchar(']');
+        if (ind == right)   putchar('>');
+
+    }
+
+    /*
+    printf("left = %5u, right = %5u, middle = %5u\n", left, right, middle);
+
+    const char l = '<';
+    const char r = '>';
+    const char m = ( left == middle ? '{' : ( right == middle ? '}' : 'm' ));
+
+    if (middle < n_memb)
+    {
+        printf("%*c%*c%*c\n",   (width)*(left+1)         + left,        l,
+                            (width)*(middle - left)  + middle - left,   m,
+                            (width)*(right - middle) + right - middle,  r);
+    }
+    else
+    {
+        //middle на самом деле нету
+        printf("%*c%*c\n",   (width)*(left+1)         + left,        l,
+                             (width)*(right - left) + right - left,  r);
+    }
 
     for (size_t ind = 0; ind < n_memb; ind++)
     {
         printf("%*d ", width, arr[ind]);
     }
+    */
+
+
+
     printf("\n");
 }
 
