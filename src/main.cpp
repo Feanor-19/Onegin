@@ -7,7 +7,7 @@ int cmp_int(const void *a, const void *b);
 
 int main()
 {
-    /*
+    /* //ONEGIN
     printf("Enter file's name:\n");
     char *file_name = read_line(stdin);
 
@@ -20,26 +20,13 @@ int main()
     else printf("Some error occured!\n");
     */
 
+    // TODO std_qsort_wrap, потому что отличается сигнатура у стандартного и моего,
+    // а чтобы запихнуть в sorttesting, нужно стандартный привести к моему виду
+    // или быстро переделать свою сигнатуру....
 
     int arr[] = { 5, 2, 15, 3, 1, 16, 10, 5, 10, 3, 4, 12, 6, 6, 22, 20 };
     size_t arr_len = sizeof(arr)/sizeof(arr[0]);
-    my_sort(arr, arr_len, sizeof(arr[0]), 0, arr_len - 1, cmp_int);
-
-
-    /*
-    //print sort test
-    int arr[] = { 1, 2, 3, 19, 5, 6, 755, 8, 9 };
-    print_my_sort_int( arr, sizeof(arr)/sizeof(arr[0]), 2, 6, 4 );
-
-    arr[2] = 755;
-    arr[6] = 3;
-
-    print_my_sort_int( arr, sizeof(arr)/sizeof(arr[0]), 3, 7, 5 );
-
-    swap(arr + 2, arr + 5, sizeof(int));
-
-    print_my_sort_int( arr, sizeof(arr)/sizeof(arr[0]), 3, 7, 7 );
-    */
+    my_sort(arr, arr_len, sizeof(arr[0]), cmp_int);
 
     return 0;
 }

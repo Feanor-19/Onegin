@@ -171,17 +171,27 @@ char *read_line(FILE *stream)
 
 //--- sorting
 
+void my_sort(   void * first,
+                size_t number,
+                size_t size,
+                int ( * comparator ) ( const void *, const void * ),
+                int do_print)
+{
+    my_sort__(first, number, size, 0, number - 1, comparator, do_print);
+}
+
 inline void *get_elem_pnt(size_t ind, void *arr, size_t memb_size)
 {
     return (void *) (( (char *) arr ) + memb_size*ind);
 }
 
-void my_sort(   void *arr,
+void my_sort__( void *arr,
                 size_t n_memb,
                 size_t memb_size,
                 size_t left,
                 size_t right,
-                int (*cmp)(const void *, const void *) )
+                int (*cmp)(const void *, const void *),
+                int do_print)
 {
     assert(arr);
     assert(cmp);
@@ -192,35 +202,35 @@ void my_sort(   void *arr,
         {
             swap( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size), memb_size );
 
-            printf("Simple swap case\n");
-            print_my_sort_int((int *) arr, n_memb, left, right, n_memb+1);
+            if (do_print) printf("Simple swap case\n");
+            if (do_print) print_my_sort_int__((int *) arr, n_memb, left, right, n_memb+1);
         }
     }
     else
     {
         int any_swaps_done = 0;
 
-        printf("Entering partition...\n");
-        size_t mid = partition(arr, n_memb, memb_size, left, right, &any_swaps_done, cmp);
-        printf("Left partition\n");
+        if (do_print) printf("Entering partition...\n");
+        size_t mid = partition(arr, n_memb, memb_size, left, right, &any_swaps_done, cmp, do_print);
+        if (do_print) printf("Left partition\n");
 
         if (!any_swaps_done)
         {
-            printf("No swaps were done during partition. I guess no sorting is necessary.\n");
+            if (do_print) printf("No swaps were done during partition. I guess no sorting is necessary.\n");
             return;
         }
 
         if ( mid   - left      > 0 )
         {
-            printf("!Entering sorting from index %u to index %u\n", left, mid);
-            my_sort(arr, n_memb, memb_size, left, mid, cmp);
-            printf("!Leaving sorting from index %u to index %u\n", left, mid);
+            if (do_print) printf("!Entering sorting from index %u to index %u\n", left, mid);
+            my_sort__(arr, n_memb, memb_size, left, mid, cmp, do_print);
+            if (do_print) printf("!Leaving sorting from index %u to index %u\n", left, mid);
         }
         if ( right - (mid + 1) > 0 )
         {
-            printf("@Entering sorting from index %u to index %u\n", mid + 1, right);
-            my_sort(arr, n_memb, memb_size, mid + 1, right, cmp);
-            printf("@Leaving sorting from index %u to index %u\n", mid + 1, right);
+            if (do_print) printf("@Entering sorting from index %u to index %u\n", mid + 1, right);
+            my_sort__(arr, n_memb, memb_size, mid + 1, right, cmp, do_print);
+            if (do_print) printf("@Leaving sorting from index %u to index %u\n", mid + 1, right);
         }
     }
 
@@ -232,13 +242,14 @@ size_t partition(   void *arr,
                     size_t left,
                     size_t right,
                     int *any_swaps_done,
-                    int (*cmp)(const void *, const void *) )
+                    int (*cmp)(const void *, const void *),
+                    int do_print)
 {
     assert(arr);
 
     size_t middle = (right + left) / 2 + 1;
 
-    print_my_sort_int((int *) arr, n_memb, left, right, middle);
+    if (do_print) print_my_sort_int__((int *) arr, n_memb, left, right, middle);
 
     while( left < right )
     {
@@ -251,7 +262,7 @@ size_t partition(   void *arr,
                 return left;
             }
 
-            print_my_sort_int((int *) arr, n_memb, left, right, middle);
+            if (do_print) print_my_sort_int__((int *) arr, n_memb, left, right, middle);
         }
 
         while ( cmp( get_elem_pnt(middle, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) < 0 )
@@ -263,26 +274,28 @@ size_t partition(   void *arr,
                 return left;
             }
 
-            print_my_sort_int((int *) arr, n_memb, left, right, middle);
+            if (do_print) print_my_sort_int__((int *) arr, n_memb, left, right, middle);
         }
 
         swap( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size), memb_size );
-        printf("Swap done: at index %u exchanged with at index %u\n", left, right);
+        if (do_print) printf("Swap done: at index %u exchanged with at index %u\n", left, right);
         *any_swaps_done = 1;
 
-        print_my_sort_int((int *) arr, n_memb, left, right, middle);
+        if (do_print) print_my_sort_int__((int *) arr, n_memb, left, right, middle);
 
         if (left  == middle) middle = right;
         else if (right == middle) middle = left;
 
-        print_my_sort_int((int *) arr, n_memb, left, right, middle);
+        if (do_print) print_my_sort_int__((int *) arr, n_memb, left, right, middle);
 
         left++;
         right--;
 
-        print_my_sort_int((int *) arr, n_memb, left, right, middle);
+        if (do_print) print_my_sort_int__((int *) arr, n_memb, left, right, middle);
 
     }
+
+    return left;
 }
 
 /*
@@ -320,21 +333,23 @@ void swap( void *a, void *b, size_t memb_size )
 
 }
 
+/*
 int line_start_cmp( const void *line1, const void *line2 )
 {
 
 }
+*/
 
 inline void put_n_spaces(size_t n)
 {
     while(n--) putchar(' ');
 }
 
-void print_my_sort_int( int *arr,
-                        size_t n_memb,
-                        size_t left,
-                        size_t right,
-                        size_t middle)
+void print_my_sort_int__(   int *arr,
+                            size_t n_memb,
+                            size_t left,
+                            size_t right,
+                            size_t middle)
 {
     assert(arr);
 
@@ -358,34 +373,6 @@ void print_my_sort_int( int *arr,
         if (ind == right)   putchar('>');
 
     }
-
-    /*
-    printf("left = %5u, right = %5u, middle = %5u\n", left, right, middle);
-
-    const char l = '<';
-    const char r = '>';
-    const char m = ( left == middle ? '{' : ( right == middle ? '}' : 'm' ));
-
-    if (middle < n_memb)
-    {
-        printf("%*c%*c%*c\n",   (width)*(left+1)         + left,        l,
-                            (width)*(middle - left)  + middle - left,   m,
-                            (width)*(right - middle) + right - middle,  r);
-    }
-    else
-    {
-        //middle на самом деле нету
-        printf("%*c%*c\n",   (width)*(left+1)         + left,        l,
-                             (width)*(right - left) + right - left,  r);
-    }
-
-    for (size_t ind = 0; ind < n_memb; ind++)
-    {
-        printf("%*d ", width, arr[ind]);
-    }
-    */
-
-
 
     printf("\n");
 }
