@@ -8,7 +8,7 @@ int cmp_int(const void *a, const void *b);
 
 int main()
 {
-    /* //ONEGIN
+
     printf("Enter file's name:\n");
     char *file_name = read_line(stdin);
 
@@ -19,13 +19,21 @@ int main()
 
     if (err == ERROR_NO) print_file_text(text);
     else printf("Some error occured!\n");
-    */
 
-    //test_int_sort(qsort, my_sort_for_testing, 1, 10);
+    printf("Sorted as an alphabet: \n");
+    my_sort(text.text, text.nLines, sizeof(text.text[0]), 0, sizeof(text.text[0]) - 1, line_start_cmp);
 
-    int arr[] = { 5, 2, 15, 3, 1, 16, 10, 5, 10, 3, 4, 12, 6, 6, 22, 20 };
-    size_t arr_len = sizeof(arr)/sizeof(arr[0]);
-    my_sort(arr, arr_len, sizeof(arr[0]), 0, arr_len - 1, cmp_int, 1);
+    print_file_text(text);
+
+
+
+    //TODO INCLUDE COMMAND LINE PARSER
+    //int res = test_int_sort(qsort, my_sort_for_testing, 10000, 20, 30);
+    //printf("%d\n", res);
+
+    //int arr[] = { 55 };
+    //size_t arr_len = sizeof(arr)/sizeof(arr[0]);
+    //my_sort(arr, arr_len, sizeof(arr[0]), 0, arr_len - 1, cmp_int, 1);
 
     return 0;
 }

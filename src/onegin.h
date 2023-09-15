@@ -73,15 +73,23 @@ size_t partition(   void *arr,
                     size_t memb_size,
                     size_t left,
                     size_t right,
-                    int *any_swaps_done,
                     int (*cmp)(const void *, const void *),
                     int do_print );
+
+void work_with_equal_elems( void *arr,
+                            size_t n_memb,
+                            size_t memb_size,
+                            size_t *p_left,
+                            size_t *p_right,
+                            size_t middle,
+                            int (*cmp)(const void *, const void *),
+                            int do_print );
 
 // использовать что-то типа in32_t как буфер, и копировать через него
 //(а потом меньше и меньше тип, например char)
 void swap( void *a, void *b, size_t memb_size);
 
-//int line_start_cmp( const void *line1, const void *line2 );
+int line_start_cmp( const void *line1, const void *line2 );
 
 void print_my_sort_int__(   int *arr,
                             size_t n_memb,
