@@ -171,16 +171,15 @@ char *read_line(FILE *stream)
 
 //--- sorting
 
-void my_sort(   void * first,
+void my_sort_for_testing(   void * first,
                 size_t number,
                 size_t size,
-                int ( * comparator ) ( const void *, const void * ),
-                int do_print)
+                int ( * comparator ) ( const void *, const void * ) )
 {
     assert(first);
     assert(comparator);
 
-    my_sort__(first, number, size, 0, number - 1, comparator, do_print);
+    my_sort(first, number, size, 0, number - 1, comparator, 0);
 }
 
 inline void *get_elem_pnt(size_t ind, void *arr, size_t memb_size)
@@ -189,7 +188,7 @@ inline void *get_elem_pnt(size_t ind, void *arr, size_t memb_size)
     return (void *) (( (char *) arr ) + memb_size*ind);
 }
 
-void my_sort__( void *arr,
+void my_sort( void *arr,
                 size_t n_memb,
                 size_t memb_size,
                 size_t left,
@@ -227,13 +226,13 @@ void my_sort__( void *arr,
         if ( mid   - left      > 0 )
         {
             if (do_print) printf("!Entering sorting from index %u to index %u\n", left, mid);
-            my_sort__(arr, n_memb, memb_size, left, mid, cmp, do_print);
+            my_sort(arr, n_memb, memb_size, left, mid, cmp, do_print);
             if (do_print) printf("!Leaving sorting from index %u to index %u\n", left, mid);
         }
         if ( right - (mid + 1) > 0 )
         {
             if (do_print) printf("@Entering sorting from index %u to index %u\n", mid + 1, right);
-            my_sort__(arr, n_memb, memb_size, mid + 1, right, cmp, do_print);
+            my_sort(arr, n_memb, memb_size, mid + 1, right, cmp, do_print);
             if (do_print) printf("@Leaving sorting from index %u to index %u\n", mid + 1, right);
         }
     }

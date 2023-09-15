@@ -48,12 +48,11 @@ char *read_line(FILE *stream);
 
 //--- sorting
 
-// Обёртка, чтобы сигнатура совпадала с сигнатурой библиотечного qsort()
-void my_sort(   void * first,
+// Обёртка для тестов, чтобы сигнатура совпадала с сигнатурой библиотечного qsort()
+void my_sort_for_testing(   void * first,
                 size_t number,
                 size_t size,
-                int ( * comparator ) ( const void *, const void * ),
-                int do_print = 0);
+                int ( * comparator ) ( const void *, const void * ) );
 
 /*
     Важное примечание:
@@ -61,13 +60,13 @@ void my_sort(   void * first,
     а ограничение области, в которой ф-я должна что-то сделать, достигается за счет
     указания left и rigth, которые являются ОБА включительными
 */
-void my_sort__( void *arr,
+void my_sort( void *arr,
                 size_t n_memb,
                 size_t memb_size,
                 size_t left,
                 size_t right,
                 int (*cmp)(const void *, const void *),
-                int do_print );
+                int do_print = 0 );
 
 size_t partition(   void *arr,
                     size_t n_memb,

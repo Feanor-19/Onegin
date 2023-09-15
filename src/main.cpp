@@ -21,7 +21,11 @@ int main()
     else printf("Some error occured!\n");
     */
 
+    //test_int_sort(qsort, my_sort_for_testing, 1, 10);
 
+    int arr[] = { 5, 2, 15, 3, 1, 16, 10, 5, 10, 3, 4, 12, 6, 6, 22, 20 };
+    size_t arr_len = sizeof(arr)/sizeof(arr[0]);
+    my_sort(arr, arr_len, sizeof(arr[0]), 0, arr_len - 1, cmp_int, 1);
 
     return 0;
 }

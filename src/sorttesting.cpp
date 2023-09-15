@@ -16,7 +16,6 @@ int test_int_sort(  void sort1( void * first,
     assert(sort1);
     assert(sort2);
 
-
     size_t not_passed = 0;
 
     int *data1 = (int *) calloc(test_size, sizeof(int));
