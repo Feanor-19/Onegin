@@ -177,11 +177,15 @@ void my_sort(   void * first,
                 int ( * comparator ) ( const void *, const void * ),
                 int do_print)
 {
+    assert(first);
+    assert(comparator);
+
     my_sort__(first, number, size, 0, number - 1, comparator, do_print);
 }
 
 inline void *get_elem_pnt(size_t ind, void *arr, size_t memb_size)
 {
+    assert(arr);
     return (void *) (( (char *) arr ) + memb_size*ind);
 }
 
@@ -246,6 +250,8 @@ size_t partition(   void *arr,
                     int do_print)
 {
     assert(arr);
+    assert(any_swaps_done);
+    assert(cmp);
 
     size_t middle = (right + left) / 2 + 1;
 

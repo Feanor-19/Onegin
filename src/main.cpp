@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "onegin.h"
+#include "sorttesting.h"
 #include "mystring.h"
 
 int cmp_int(const void *a, const void *b);
@@ -20,13 +21,7 @@ int main()
     else printf("Some error occured!\n");
     */
 
-    // TODO std_qsort_wrap, потому что отличается сигнатура у стандартного и моего,
-    // а чтобы запихнуть в sorttesting, нужно стандартный привести к моему виду
-    // или быстро переделать свою сигнатуру....
 
-    int arr[] = { 5, 2, 15, 3, 1, 16, 10, 5, 10, 3, 4, 12, 6, 6, 22, 20 };
-    size_t arr_len = sizeof(arr)/sizeof(arr[0]);
-    my_sort(arr, arr_len, sizeof(arr[0]), cmp_int);
 
     return 0;
 }
