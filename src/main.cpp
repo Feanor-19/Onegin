@@ -7,6 +7,8 @@
 
 int cmp_int(const void *a, const void *b);
 
+//TODO ПЕРЕДЕЛАТЬ ВСЮ НАСТРОЙКУ НА АРГУМЕНТЫ КОМАНДНОЙ СТРОКИ
+
 int main()
 {
     printf("Enter file's name:\n");
@@ -22,21 +24,22 @@ int main()
         return 0;
     }
 
-    print_file_text(text);
+    //print_file_text(text);
 
     my_sort(text.line_array,
             text.nLines,
             sizeof(text.line_array[0]),
             0,
-            sizeof(text.line_array[0]) - 1,
-            line_start_cmp);
+            text.nLines - 1,
+            line_start_cmp,
+            0);
 
     printf("Sorted as the alphabet: \n");
     print_file_text(text);
 
     //TODO INCLUDE COMMAND LINE PARSER
-    //int res = test_int_sort(qsort, my_sort_for_testing, 10000, 20, 30);
-    //printf("%d\n", res);
+    //int not_passed = test_int_sort(qsort, my_sort_for_testing, 1000, 20, 30);
+    //printf("%d\n", not_passed);
 
     //int arr[] = { 55 };
     //size_t arr_len = sizeof(arr)/sizeof(arr[0]);

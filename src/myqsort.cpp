@@ -23,6 +23,23 @@ inline void *get_elem_pnt(size_t ind, void *arr, size_t memb_size)
     return (void *) (( (char *) arr ) + memb_size*ind);
 }
 
+inline int compare(   void *arr,
+                        size_t memb_size,
+                        size_t ind_a,
+                        size_t ind_b,
+                        int (*cmp)(const void *, const void *),
+                        int do_print)
+{
+    assert(arr);
+
+    assert( get_elem_pnt(ind_a, arr, memb_size) );
+    assert( get_elem_pnt(ind_b, arr, memb_size) );
+
+    if (do_print) printf("ind_a = %u, ind_b = %u\n", ind_a, ind_b);
+
+    return cmp( get_elem_pnt(ind_a, arr, memb_size), get_elem_pnt(ind_b, arr, memb_size) );
+}
+
 void my_sort( void *arr,
                 size_t n_memb,
                 size_t memb_size,
@@ -38,7 +55,7 @@ void my_sort( void *arr,
 
     if (right - left == 1) // простой частный случай
     {
-        if ( cmp( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) > 0 )
+        if ( compare(arr, memb_size, left, right, cmp, do_print) > 0 )
         {
             swap( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size), memb_size );
 
@@ -87,12 +104,12 @@ size_t partition(   void *arr,
     while( left < right )
     {
 
-        if ( cmp( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) == 0 )
+        if ( compare(arr, memb_size, left, right, cmp, do_print) == 0 )
         {
             work_with_equal_elems(arr, n_memb, memb_size, &left, &right, middle, cmp, do_print);
         }
 
-        while ( cmp( get_elem_pnt(left, arr, memb_size), get_elem_pnt(middle, arr, memb_size) ) < 0 )
+        while ( compare(arr, memb_size, left, middle, cmp, do_print) < 0 )
         {
             left++;
 
@@ -101,7 +118,7 @@ size_t partition(   void *arr,
                 return left;
             }
 
-            if ( cmp( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) == 0 )
+            if ( compare(arr, memb_size, left, right, cmp, do_print) == 0 )
             {
                 work_with_equal_elems(arr, n_memb, memb_size, &left, &right, middle, cmp, do_print);
             }
@@ -109,7 +126,7 @@ size_t partition(   void *arr,
             if (do_print) print_my_sort_int__((int *) arr, n_memb, left, right, middle);
         }
 
-        while ( cmp( get_elem_pnt(middle, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) < 0 )
+        while ( compare(arr, memb_size, middle, right, cmp, do_print) < 0 )
         {
             right--;
 
@@ -118,7 +135,7 @@ size_t partition(   void *arr,
                 return left;
             }
 
-            if ( cmp( get_elem_pnt(left, arr, memb_size), get_elem_pnt(right, arr, memb_size) ) == 0 )
+            if ( compare(arr, memb_size, left, right, cmp, do_print) == 0 )
             {
                 work_with_equal_elems(arr, n_memb, memb_size, &left, &right, middle, cmp, do_print);
             }
@@ -156,7 +173,7 @@ void work_with_equal_elems( void *arr,
 {
     if (do_print) print_my_sort_int__((int *) arr, n_memb, *p_left, *p_right, middle);
 
-    if ( cmp( get_elem_pnt(*p_left, arr, memb_size), get_elem_pnt(middle, arr, memb_size) ) >= 0 )
+    if ( compare(arr, memb_size, *p_left, middle, cmp, do_print) >= 0 )
     {
         if (do_print) printf("Elements at left and at right are equal, swapping is unnecessary. "
             "Also element at left >= at middle, so we need to swap it later, "
