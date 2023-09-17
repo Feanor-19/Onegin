@@ -6,109 +6,96 @@
 
 #include "mystring.h"
 
-TextFromFile read_text_from_file(const char *file_name, ErrorCodes *err)
+Text read_text_from_file(const char *file_name, ErrorCodes *err)
 {
     assert(file_name);
 
-    TextFromFile read_file = {};
+    FileBuf file_buf = read_file_to_buf(file_name, err);
+    if (*err != ERROR_NO)
+    {
+        Text text = {};
+        return text;
+    }
+
+    Text text = parse_buf_to_text(file_buf);
+
+    return text;
+}
+
+FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err)
+{
+    FileBuf file_buf = {};
 
     off_t file_size = get_file_size(file_name);
     if (file_size == -1) {
         *err = ERROR_FILE_SIZE;
-        return read_file;
+        return file_buf;
     }
 
-    char *buf = read_file_to_buf(file_name, file_size, err);
-    if (buf == NULL) return read_file;
-
-    //printf("! buf: <%s>\n", buf);
-
-    Text *text_p = parse_buf_to_text(buf, file_size);
-
-    read_file.name = file_name;
-    read_file.text = text_p->text;
-    read_file.nLines = text_p->nLines;
-
-    free(buf);
-
-    destroy_Text(text_p);
-
-    return read_file;
-}
-
-char *read_file_to_buf(const char *file_name, off_t file_size, ErrorCodes *err)
-{
     FILE *file_p = fopen(file_name, "r");
     if (file_p == NULL) {
         *err = ERROR_OPEN_FILE;
-        return NULL;
+        return file_buf;
     }
 
     char *buf = (char *) calloc( file_size + 1, sizeof(char) );
 
-    fread(buf, sizeof(char), file_size, file_p);
+    size_t buf_size = fread(buf, sizeof(char), file_size, file_p);
     if ( ferror(file_p) != 0 )
     {
         *err = ERROR_READ_FILE;
         free(buf);
-        return NULL;
+        return file_buf;
     }
+
+    file_buf.buf = buf;
+    file_buf.buf_size = buf_size;
 
     fclose(file_p);
     file_p = NULL;
 
-    return buf;
+    return file_buf;
 }
 
-Text *parse_buf_to_text(char *buf, off_t file_size)
+Text parse_buf_to_text(FileBuf file_buf)
 {
-    assert(buf);
-
     const size_t DEFAULT_TEXT_SIZE = 10;
     assert(DEFAULT_TEXT_SIZE > 2);
 
-    char **text = (char **) calloc(DEFAULT_TEXT_SIZE, sizeof(char *));
+    char **line_array = (char **) calloc(DEFAULT_TEXT_SIZE, sizeof(char *));
 
-    size_t free_place_in_text = DEFAULT_TEXT_SIZE;
+    size_t free_place_in_line_arr = DEFAULT_TEXT_SIZE;
     size_t curr_text_size = DEFAULT_TEXT_SIZE;
 
-    text[0] = buf;
-    free_place_in_text--;
+    line_array[0] = file_buf.buf;
+    free_place_in_line_arr--;
 
     size_t line = 1;
-    for (off_t ind = 0; ind < file_size - 1; ind++)
+    for (size_t ind = 0; ind < file_buf.buf_size - 1; ind++)
     {
-        if ( buf[ind] == '\n' )
+        if ( file_buf.buf[ind] == '\n' )
         {
-            buf[ind] = '\0';
-            text[line++] = &buf[ind + 1];
-            free_place_in_text--;
+            file_buf.buf[ind] = '\0';
+            line_array[line++] = &file_buf.buf[ind + 1];
+            free_place_in_line_arr--;
 
-            if (free_place_in_text == 0)
+            if (free_place_in_line_arr == 0)
             {
-                realloc_text(&text, &curr_text_size, &free_place_in_text);
+                realloc_line_array(&line_array, &curr_text_size, &free_place_in_line_arr);
             }
         }
     }
 
-    printf("Info: curr_text_size = %u, free_place_in_text = %u\n", curr_text_size, free_place_in_text);
+    //printf("Info: curr_text_size = %u, free_place_in_line_arr = %u\n", curr_text_size, free_place_in_line_arr);
 
-    Text *text_p = (Text *) calloc(1, sizeof(Text));
-    text_p->text = text;
-    text_p->nLines = line;
+    Text text = {};
+    text.line_array = line_array;
+    text.nLines = line;
 
-    return text_p;
+    return text;
 }
 
-void destroy_Text(Text *text_p)
-{
-    assert(text_p);
-
-    if (text_p->text != NULL) free(text_p->text);
-    free(text_p);
-}
-
-void realloc_text(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p)
+void realloc_line_array(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p)
 {
     size_t old_text_size = *curr_text_size_p;
 
@@ -128,13 +115,11 @@ void realloc_text(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p
     *text_p = new_text;
 }
 
-void print_file_text( TextFromFile file )
+void print_file_text( Text text )
 {
-    printf("Here is the text in file %s:\n", file.name);
-
-    for (unsigned long ind = 0; ind < file.nLines; ind++ )
+    for (unsigned long ind = 0; ind < text.nLines; ind++ )
     {
-        printf("Line at address %p : <%s>\n", &file.text[ind], file.text[ind]);
+        printf("Line at address %p : <%s>\n", &text.line_array[ind], text.line_array[ind]);
     }
 
     printf("The END!\n");

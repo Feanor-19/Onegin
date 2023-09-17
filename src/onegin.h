@@ -14,32 +14,29 @@ enum ErrorCodes
     ERROR_READ_FILE = 3,
 };
 
-struct TextFromFile
+struct Text
 {
-    const char *name = NULL;
-    char **text = NULL;         //< массив строк, из которых состоял текст файла
+    char **line_array = NULL;         //< массив адресов строк
     unsigned long nLines = 0;   //< кол-во строк в файле, aka размер text[]
 };
 
-struct Text
+struct FileBuf
 {
-    char **text;
-    size_t nLines;
+    char *buf = NULL;
+    size_t buf_size = 0;
 };
 
 //---
 
-TextFromFile read_text_from_file(const char *file_name, ErrorCodes *err = NULL);
+Text read_text_from_file(const char *file_name, ErrorCodes *err = NULL);
 
-char *read_file_to_buf(const char *file_name, off_t file_size, ErrorCodes *err);
+FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err);
 
-Text *parse_buf_to_text(char *buf, off_t file_size);
+Text parse_buf_to_text(FileBuf file_buf);
 
-void destroy_Text(Text *text);
+void realloc_line_array(char ***line_array_p, size_t *curr_text_size_p, size_t* free_place_p);
 
-void realloc_text(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p);
-
-void print_file_text( TextFromFile file );
+void print_file_text( Text text );
 
 off_t get_file_size(const char *file_name);
 

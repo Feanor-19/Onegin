@@ -15,8 +15,7 @@ int main()
     printf("Entered file name: <%s>\n", file_name);
 
     ErrorCodes err = ERROR_NO;
-    TextFromFile text = read_text_from_file(file_name, &err); // какого фига не работает без второго аргумента по умолч
-
+    Text text = read_text_from_file(file_name, &err);
     if (err != ERROR_NO)
     {
         printf("Some error occurred!\n");
@@ -25,9 +24,14 @@ int main()
 
     print_file_text(text);
 
-    my_sort(text.text, text.nLines, sizeof(text.text[0]), 0, sizeof(text.text[0]) - 1, line_start_cmp);
+    my_sort(text.line_array,
+            text.nLines,
+            sizeof(text.line_array[0]),
+            0,
+            sizeof(text.line_array[0]) - 1,
+            line_start_cmp);
 
-    printf("Sorted as an alphabet: \n");
+    printf("Sorted as the alphabet: \n");
     print_file_text(text);
 
     //TODO INCLUDE COMMAND LINE PARSER
