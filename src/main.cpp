@@ -17,12 +17,17 @@ int main()
     ErrorCodes err = ERROR_NO;
     TextFromFile text = read_text_from_file(file_name, &err); // какого фига не работает без второго аргумента по умолч
 
-    if (err == ERROR_NO) print_file_text(text);
-    else printf("Some error occured!\n");
+    if (err != ERROR_NO)
+    {
+        printf("Some error occurred!\n");
+        return 0;
+    }
 
-    printf("Sorted as an alphabet: \n");
+    print_file_text(text);
+
     my_sort(text.text, text.nLines, sizeof(text.text[0]), 0, sizeof(text.text[0]) - 1, line_start_cmp);
 
+    printf("Sorted as an alphabet: \n");
     print_file_text(text);
 
 

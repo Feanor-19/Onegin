@@ -171,7 +171,8 @@ char *read_line(FILE *stream)
 
 //--- sorting
 
-void my_sort_for_testing(   void * first,
+void my_sort_for_testing(
+                void * first,
                 size_t number,
                 size_t size,
                 int ( * comparator ) ( const void *, const void * ) )
@@ -198,6 +199,8 @@ void my_sort( void *arr,
 {
     assert(arr);
     assert(cmp);
+
+    if (n_memb == 1) return;
 
     if (right - left == 1) // простой частный случай
     {
@@ -376,8 +379,8 @@ void swap( void *a, void *b, size_t memb_size )
 
 int line_start_cmp( const void *v_line1, const void *v_line2 )
 {
-    const char *line1 = *((const char **) v_line1);
-    const char *line2 = *((const char **) v_line2);
+    const char *line1 = *((const char * const *) v_line1);
+    const char *line2 = *((const char * const *) v_line2);
 
     return my_strcmp(line1, line2);
 }
