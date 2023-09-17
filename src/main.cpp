@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "onegin.h"
+#include "myqsort.h"
 #include "sorttesting.h"
 #include "mystring.h"
 
@@ -8,7 +9,6 @@ int cmp_int(const void *a, const void *b);
 
 int main()
 {
-
     printf("Enter file's name:\n");
     char *file_name = read_line(stdin);
 
@@ -29,8 +29,6 @@ int main()
 
     printf("Sorted as an alphabet: \n");
     print_file_text(text);
-
-
 
     //TODO INCLUDE COMMAND LINE PARSER
     //int res = test_int_sort(qsort, my_sort_for_testing, 10000, 20, 30);
