@@ -57,18 +57,27 @@ FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err)
     return file_buf;
 }
 
+inline size_t count_n_lines_in_buf(FileBuf file_buf)
+{
+    size_t n_lines = 1;
+    for (size_t ind = 0; ind < file_buf.buf_size; ind++)
+    {
+        if (file_buf.buf[ind] == '\n') n_lines++;
+    }
+
+    return n_lines;
+}
+
 Text parse_buf_to_text(FileBuf file_buf)
 {
-    const size_t DEFAULT_TEXT_SIZE = 10;
-    assert(DEFAULT_TEXT_SIZE > 2);
+    //const size_t DEFAULT_TEXT_SIZE = 10;
+    //assert(DEFAULT_TEXT_SIZE > 2);
 
-    char **line_array = (char **) calloc(DEFAULT_TEXT_SIZE, sizeof(char *));
+    size_t n_lines_in_buf = count_n_lines_in_buf(file_buf);
 
-    size_t free_place_in_line_arr = DEFAULT_TEXT_SIZE;
-    size_t curr_text_size = DEFAULT_TEXT_SIZE;
+    char **line_array = (char **) calloc(n_lines_in_buf, sizeof(char *));
 
     line_array[0] = file_buf.buf;
-    free_place_in_line_arr--;
 
     size_t line = 1;
     for (size_t ind = 0; ind < file_buf.buf_size - 1; ind++)
@@ -77,12 +86,6 @@ Text parse_buf_to_text(FileBuf file_buf)
         {
             file_buf.buf[ind] = '\0';
             line_array[line++] = &file_buf.buf[ind + 1];
-            free_place_in_line_arr--;
-
-            if (free_place_in_line_arr == 0)
-            {
-                realloc_line_array(&line_array, &curr_text_size, &free_place_in_line_arr);
-            }
         }
     }
 
@@ -95,6 +98,7 @@ Text parse_buf_to_text(FileBuf file_buf)
     return text;
 }
 
+/*
 void realloc_line_array(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p)
 {
     size_t old_text_size = *curr_text_size_p;
@@ -114,6 +118,7 @@ void realloc_line_array(char ***text_p, size_t *curr_text_size_p, size_t* free_p
 
     *text_p = new_text;
 }
+*/
 
 void print_file_text( Text text, FILE *stream, int do_print_addresses )
 {

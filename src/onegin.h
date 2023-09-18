@@ -34,7 +34,7 @@ FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err);
 
 Text parse_buf_to_text(FileBuf file_buf);
 
-void realloc_line_array(char ***line_array_p, size_t *curr_text_size_p, size_t* free_place_p);
+//void realloc_line_array(char ***line_array_p, size_t *curr_text_size_p, size_t* free_place_p);
 
 void print_file_text( Text text, FILE *stream, int do_print_addresses );
 
