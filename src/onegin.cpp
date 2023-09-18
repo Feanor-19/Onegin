@@ -70,8 +70,6 @@ inline size_t count_n_lines_in_buf(FileBuf file_buf)
 
 Text parse_buf_to_text(FileBuf file_buf)
 {
-    //const size_t DEFAULT_TEXT_SIZE = 10;
-    //assert(DEFAULT_TEXT_SIZE > 2);
 
     size_t n_lines_in_buf = count_n_lines_in_buf(file_buf);
 
@@ -97,28 +95,6 @@ Text parse_buf_to_text(FileBuf file_buf)
 
     return text;
 }
-
-/*
-void realloc_line_array(char ***text_p, size_t *curr_text_size_p, size_t* free_place_p)
-{
-    size_t old_text_size = *curr_text_size_p;
-
-    *curr_text_size_p = 2 * old_text_size;
-
-    *free_place_p = *curr_text_size_p - old_text_size;
-
-    char **new_text = (char **) calloc( *curr_text_size_p, sizeof(char *) );
-
-    for (size_t ind = 0; ind < old_text_size; ind++)
-    {
-        new_text[ind] = (*text_p)[ind];
-    }
-
-    free(*text_p);
-
-    *text_p = new_text;
-}
-*/
 
 void print_file_text( Text text, FILE *stream, int do_print_addresses )
 {
