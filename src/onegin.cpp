@@ -158,3 +158,22 @@ char *read_line(FILE *stream)
 
     return str;
 }
+
+inline void skip_not_alnum( const char ** const p_line )
+{
+    while ( **p_line != '\0' && !isalpha(**p_line) ) (*p_line)++;
+}
+
+int cmp_line_beginning( const void *v_line1, const void *v_line2 )
+{
+    assert(v_line1 != NULL);
+    assert(v_line2 != NULL);
+
+    const char *line1 = *((const char * const *) v_line1);
+    const char *line2 = *((const char * const *) v_line2);
+
+    skip_not_alnum(&line1);
+    skip_not_alnum(&line2);
+
+    return my_strcmp(line1, line2);
+}

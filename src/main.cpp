@@ -38,7 +38,7 @@ int main(int argc, const char *argv[])
                 sizeof(text.line_array[0]),
                 0,
                 text.nLines - 1,
-                line_start_cmp,
+                cmp_line_beginning,
                 0);
     }
     else if (cfg.do_sort_end)

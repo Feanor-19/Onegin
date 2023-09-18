@@ -227,20 +227,6 @@ void swap( void *a, void *b, size_t memb_size )
 
 }
 
-int line_start_cmp( const void *v_line1, const void *v_line2 )
-{
-    assert(v_line1 != NULL);
-    assert(v_line2 != NULL);
-
-    const char *line1 = *((const char * const *) v_line1);
-    const char *line2 = *((const char * const *) v_line2);
-
-    //printf("~~~\nv_line1 = %p\nline1 = %p\nv_line2 = %p\nline2 = %p\n~~~\n", v_line1, line1, v_line2, line2);
-
-    return my_strcmp(line1, line2);
-}
-
-
 inline void put_n_spaces(size_t n)
 {
     while(n--) putchar(' ');

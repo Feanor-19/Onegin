@@ -44,8 +44,6 @@ void work_with_equal_elems( void *arr,
 //(а потом меньше и меньше тип, например char)
 void swap( void *a, void *b, size_t memb_size);
 
-int line_start_cmp( const void *line1, const void *line2 );
-
 void print_my_sort_int__(   int *arr,
                             size_t n_memb,
                             size_t left,
