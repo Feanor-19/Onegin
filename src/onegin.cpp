@@ -115,14 +115,19 @@ void realloc_line_array(char ***text_p, size_t *curr_text_size_p, size_t* free_p
     *text_p = new_text;
 }
 
-void print_file_text( Text text )
+void print_file_text( Text text, FILE *stream, int do_print_addresses )
 {
     for (unsigned long ind = 0; ind < text.nLines; ind++ )
     {
-        printf("Line at address %p : <%s>\n", &text.line_array[ind], text.line_array[ind]);
+        if (do_print_addresses)
+        {
+            fprintf(stream, "Line at address %p : <%s>\n", &text.line_array[ind], text.line_array[ind]);
+        }
+        else
+        {
+            fprintf(stream, "%s\n", text.line_array[ind]);
+        }
     }
-
-    printf("The END!\n");
 }
 
 //! @brief Returns file's (of name 'file_name') size or -1 in case of error.
