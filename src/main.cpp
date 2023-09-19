@@ -20,12 +20,14 @@ int main(int argc, const char *argv[])
     }
 
     ErrorCodes err = ERROR_NO;
-    Text text = read_text_from_file( (!is_str_empty(cfg.data_source) ? cfg.data_source : "input.txt") , &err);
+    FileBuf file_buf = read_file_to_buf((!is_str_empty(cfg.data_source) ? cfg.data_source : "input.txt"), &err);
     if (err != ERROR_NO)
     {
         print_error_message(err);
         return 0;
     }
+
+    Text text = parse_buf_to_text(file_buf);
 
     if (cfg.do_sort_begin)
     {
@@ -66,6 +68,10 @@ int main(int argc, const char *argv[])
     {
         print_file_text(text, stdin, cfg.do_print_addresses);
     }
+
+    buf_free(&file_buf);
+
+    text_free(&text);
 
     return 0;
 }

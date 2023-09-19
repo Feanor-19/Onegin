@@ -57,7 +57,7 @@ FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err)
     return file_buf;
 }
 
-inline size_t count_n_lines_in_buf(FileBuf file_buf)
+inline size_t count_lines_in_buf(FileBuf file_buf)
 {
     size_t n_lines = 1;
     for (size_t ind = 0; ind < file_buf.buf_size; ind++)
@@ -71,7 +71,7 @@ inline size_t count_n_lines_in_buf(FileBuf file_buf)
 Text parse_buf_to_text(FileBuf file_buf)
 {
 
-    size_t n_lines_in_buf = count_n_lines_in_buf(file_buf);
+    size_t n_lines_in_buf = count_lines_in_buf(file_buf);
 
     char **line_array = (char **) calloc(n_lines_in_buf, sizeof(char *));
 
@@ -160,6 +160,18 @@ char *read_line(FILE *stream)
     if ( str[read_bytes - 2] == '\n' ) str[read_bytes - 2] = '\0';
 
     return str;
+}
+
+void buf_free(FileBuf *buf)
+{
+    free(buf->buf);
+    buf->buf_size = 0;
+}
+
+void text_free(Text *text)
+{
+    free(text->line_array);
+    text->nLines = 0;
 }
 
 inline void skip_not_alnum( const char ** const p_line )

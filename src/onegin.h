@@ -16,7 +16,7 @@ enum ErrorCodes
 
 struct Text
 {
-    char **line_array = NULL;         //< массив адресов строк
+    char **line_array = NULL;   //< массив адресов строк
     unsigned long nLines = 0;   //< кол-во строк в файле, aka размер text[]
 };
 
@@ -42,6 +42,10 @@ void print_error_message( ErrorCodes err );
 
 //! @brief Reads one line from stream WITHOUT '\n'!
 char *read_line(FILE *stream);
+
+void buf_free(FileBuf *buf);
+
+void text_free(Text *text);
 
 int cmp_line_beginning( const void *v_line1, const void *v_line2 );
 
