@@ -123,6 +123,28 @@ off_t get_file_size(const char *file_name)
     return st_buf.st_size;
 }
 
+void print_error_message( ErrorCodes err )
+{
+    switch (err)
+        {
+        case ERROR_OPEN_FILE:
+            fprintf(stderr, "ERROR: Can't open file!\n");
+            break;
+        case ERROR_FILE_SIZE:
+            fprintf(stderr, "ERROR: Can't get file size!\n");
+            break;
+        case ERROR_READ_FILE:
+            fprintf(stderr, "ERROR: Can't read file!\n");
+            break;
+        case ERROR_NO:
+            assert(0 && "Unreacheable line reached!");
+            break;
+        default:
+            fprintf(stderr, "ERROR: Unknown error occurred!\n");
+            break;
+        }
+}
+
 char *read_line(FILE *stream)
 {
     assert(stream);

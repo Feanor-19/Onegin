@@ -38,6 +38,8 @@ void print_file_text( Text text, FILE *stream, int do_print_addresses );
 
 off_t get_file_size(const char *file_name);
 
+void print_error_message( ErrorCodes err );
+
 //! @brief Reads one line from stream WITHOUT '\n'!
 char *read_line(FILE *stream);
 
