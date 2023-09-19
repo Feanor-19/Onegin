@@ -6,35 +6,21 @@
 
 #include "mystring.h"
 
-Text read_text_from_file(const char *file_name, ErrorCodes *err)
+FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err)
 {
     assert(file_name);
 
-    FileBuf file_buf = read_file_to_buf(file_name, err);
-    if (*err != ERROR_NO)
-    {
-        Text text = {};
-        return text;
-    }
-
-    Text text = parse_buf_to_text(file_buf);
-
-    return text;
-}
-
-FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err)
-{
     FileBuf file_buf = {};
 
     off_t file_size = get_file_size(file_name);
     if (file_size == -1) {
-        *err = ERROR_FILE_SIZE;
+        if (err) *err = ERROR_FILE_SIZE;
         return file_buf;
     }
 
     FILE *file_p = fopen(file_name, "r");
     if (file_p == NULL) {
-        *err = ERROR_OPEN_FILE;
+        if (err) *err = ERROR_OPEN_FILE;
         return file_buf;
     }
 
@@ -43,7 +29,7 @@ FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err)
     size_t buf_size = fread(buf, sizeof(char), file_size, file_p);
     if ( ferror(file_p) != 0 )
     {
-        *err = ERROR_READ_FILE;
+        if (err) *err = ERROR_READ_FILE;
         free(buf);
         return file_buf;
     }
@@ -96,7 +82,28 @@ Text parse_buf_to_text(FileBuf file_buf)
     return text;
 }
 
-void print_file_text( Text text, FILE *stream, int do_print_addresses )
+void print_text(Text text, int do_print_addresses)
+{
+    print_text_to_stream(text, stdout, do_print_addresses);
+}
+
+void print_text_to_file(const char *file_name, Text text, int do_print_addresses, ErrorCodes *err)
+{
+    assert(file_name);
+
+    FILE *file_p = fopen(file_name, "w");
+    if (!file_p)
+    {
+        *err = ERROR_OPEN_FILE;
+        return;
+    }
+
+    print_text_to_stream(text, file_p, do_print_addresses);
+
+    fclose(file_p);
+}
+
+void print_text_to_stream( Text text, FILE *stream, int do_print_addresses )
 {
     for (unsigned long ind = 0; ind < text.nLines; ind++ )
     {
@@ -166,6 +173,26 @@ void buf_free(FileBuf *buf)
 {
     free(buf->buf);
     buf->buf_size = 0;
+}
+
+Text text_copy(Text source)
+{
+    assert(source.line_array);
+    assert(source.nLines > 0);
+
+    Text res = {};
+
+    char **line_array = (char **) calloc(source.nLines, sizeof(char *));
+
+    for (size_t ind = 0; ind < source.nLines; ind++)
+    {
+        line_array[ind] = source.line_array[ind];
+    }
+
+    res.line_array = line_array;
+    res.nLines = source.nLines;
+
+    return res;
 }
 
 void text_free(Text *text)

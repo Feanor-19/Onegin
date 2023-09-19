@@ -28,13 +28,15 @@ struct FileBuf
 
 //---
 
-Text read_text_from_file(const char *file_name, ErrorCodes *err = NULL);
-
-FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err);
+FileBuf read_file_to_buf(const char *file_name, ErrorCodes *err = NULL);
 
 Text parse_buf_to_text(FileBuf file_buf);
 
-void print_file_text( Text text, FILE *stream, int do_print_addresses );
+void print_text(Text text, int do_print_addresses);
+
+void print_text_to_file(const char *file_name, Text text, int do_print_addresses, ErrorCodes *err);
+
+void print_text_to_stream( Text text, FILE *stream, int do_print_addresses );
 
 off_t get_file_size(const char *file_name);
 
@@ -44,6 +46,8 @@ void print_error_message( ErrorCodes err );
 char *read_line(FILE *stream);
 
 void buf_free(FileBuf *buf);
+
+Text text_copy(Text source);
 
 void text_free(Text *text);
 

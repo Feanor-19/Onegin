@@ -27,7 +27,9 @@ int main(int argc, const char *argv[])
         return 0;
     }
 
-    Text text = parse_buf_to_text(file_buf);
+    Text text_original = parse_buf_to_text(file_buf);
+
+    Text text = text_copy(text_original);
 
     if (cfg.do_sort_begin)
     {
@@ -52,26 +54,29 @@ int main(int argc, const char *argv[])
 
     if (!is_str_empty(cfg.output_destination))
     {
-        FILE *file_p = fopen(cfg.output_destination, "w");
-
-        if (file_p == NULL)
+        print_text_to_file(cfg.output_destination, text, cfg.do_print_addresses, &err);
+        if (err != ERROR_NO)
         {
-            printf("Can't open file <%s>!\n", cfg.output_destination);
+            print_error_message(err);
             return 0;
         }
-
-        print_file_text(text, file_p, cfg.do_print_addresses);
-
-        fclose(file_p);
     }
     else
     {
-        print_file_text(text, stdin, cfg.do_print_addresses);
+        print_text(text, cfg.do_print_addresses);
+    }
+
+    print_text_to_file("original_text.txt", text_original, cfg.do_print_addresses, &err);
+    if (err != ERROR_NO)
+    {
+        print_error_message(err);
+        return 0;
     }
 
     buf_free(&file_buf);
 
     text_free(&text);
+    text_free(&text_original);
 
     return 0;
 }

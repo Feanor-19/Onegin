@@ -35,7 +35,7 @@ struct Config
     int do_tests;                       //!< Do tests and shut down (1 or 0).
     const char *data_source;            //!< Source of the data.
     const char *output_destination;     //!< Destination for the output.
-    int do_print_addresses;             //!< Used in print_file_text
+    int do_print_addresses;             //!< Used in print_text_to_stream
     int do_sort_begin;                  //!< Do sort from the beginning of a line (1 or 0).
     int do_sort_end;                    //!< Do sort from the end of a line (1 or 0). Rewrites do_sort_begin!
     ConfigError error;                  //!< ConfigError enum value.
