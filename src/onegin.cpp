@@ -158,3 +158,30 @@ int cmp_line_beginning( const void *v_line1, const void *v_line2 )
 
     return my_strcmp(line1, line2);
 }
+
+inline size_t skip_not_alnum_from_end( const char * line )
+{
+    assert(line);
+
+    const char *p = line + my_strlen(line) - 1;
+
+    while ( p != line && !isalnum(*p) ) p--;
+
+    return p - line + 1;
+}
+
+int cmp_line_end( const void *v_line1, const void *v_line2 )
+{
+    assert(v_line1 != NULL);
+    assert(v_line2 != NULL);
+
+    const char *line1 = *((const char * const *) v_line1);
+    const char *line2 = *((const char * const *) v_line2);
+
+    size_t fact_len_1 = skip_not_alnum_from_end(line1);
+    size_t fact_len_2 = skip_not_alnum_from_end(line2);
+
+    //printf("### s1 = <%s> - <%c>, s2 = <%s> - <%c>\n", line1, *(line1 + fact_len_1), line2, *(line2 + fact_len_2));
+
+    return my_strcmp(line1, line1 + fact_len_1, line2, line2 + fact_len_2, -1);
+}

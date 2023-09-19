@@ -31,7 +31,12 @@ size_t my_getline(char **lineptr, size_t *n, FILE *stream);
 
 int my_strcmp( const char * str1, const char * str2 );
 
-int my_strcmp( const char *str1_begin, const char *str1_end, const char *str2_begin, const char *str2_end );
+// @note way = 1 means straight way of comparing, way = -1 means reversed way of comparing
+int my_strcmp(  const char *str1_begin,
+                const char *str1_end,
+                const char *str2_begin,
+                const char *str2_end,
+                int way = 1 );
 
 const char * my_strstr( const char * str, const char * sub_str );
 

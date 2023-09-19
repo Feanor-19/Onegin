@@ -41,6 +41,8 @@ off_t get_file_size(const char *file_name);
 //! @brief Reads one line from stream WITHOUT '\n'!
 char *read_line(FILE *stream);
 
-int cmp_line_beginning( const void *line1, const void *line2 );
+int cmp_line_beginning( const void *v_line1, const void *v_line2 );
+
+int cmp_line_end( const void *v_line1, const void *v_line2 );
 
 #endif

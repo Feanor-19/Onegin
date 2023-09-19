@@ -327,23 +327,63 @@ int my_strcmp( const char * str1, const char * str2 )
     return ( (*str1 > *str2) ? 1 : -( *str1 < *str2 ) );
 }
 
-int my_strcmp(const char *str1_begin, const char *str1_end, const char *str2_begin, const char *str2_end)
+int my_strcmp(  const char *str1_begin,
+                const char *str1_end,
+                const char *str2_begin,
+                const char *str2_end,
+                int way )
 {
     assert(str1_begin != NULL);
     assert(str1_end != NULL);
     assert(str2_begin != NULL);
     assert(str2_end != NULL);
 
-    const char *str1_p = str1_begin;
-    const char *str2_p = str2_begin;
+    if (str1_begin == str1_end && str2_begin == str2_end) return 0;
+    if (str1_begin == str1_end) return -1;
+    if (str2_begin == str2_end) return 1;
 
-    while (str1_p != str1_end && str2_p != str2_end && *str1_p == *str2_p)
+    if ( !(way == 1 || way == -1) ) way = 1;
+
+    const char *str1_p = NULL;
+    const char *str2_p = NULL;
+
+    if (way == 1)
     {
-        str1_p++;
-        str2_p++;
+        str1_p = str1_begin;
+        str2_p = str2_begin;
+
+        while (str1_p != str1_end && str2_p != str2_end && *str1_p == *str2_p)
+        {
+            str1_p += 1;
+            str2_p += 1;
+        }
+
+        //return ( (*str1_p > *str2_p) ? 1 : -( *str1_p < *str2_p ) );
+    }
+    else
+    {
+        str1_p = str1_end - 1;
+        str2_p = str2_end - 1;
+
+        while (str1_p > str1_begin && str2_p > str2_begin && *str1_p == *str2_p)
+        {
+            str1_p -= 1;
+            str2_p -= 1;
+        }
+
+        //printf("@@@ %d\n", str2_p == str2_begin);
+
+        if (str1_p >  str1_begin && str2_p == str2_begin) return 1;
+        if (str1_p == str1_begin && str2_p  > str2_begin) return -1;
+
+        //return ( (*str1_p > *str2_p) ? 1 : -( *str1_p < *str2_p ) );
+
     }
 
     return ( (*str1_p > *str2_p) ? 1 : -( *str1_p < *str2_p ) );
+
+    //assert(0 && "Unreachable line!");
+    //return 0;
 }
 
 const char * my_strstr( const char * str, const char * sub_str )

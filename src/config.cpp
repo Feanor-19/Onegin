@@ -1,10 +1,10 @@
 #include "config.h"
 
 const char* FLAG_HELP               = "-h";
-const char* FLAG_TESTS              = "-tests";
-const char* FLAG_INPUT_FILE         = "-fin";
-const char* FLAG_OUTPUT_FILE        = "-fout";
-const char* FLAG_PRINT_ADDRESS      = "-addr";
+const char* FLAG_TESTS              = "-tests"; // --run-test
+const char* FLAG_INPUT_FILE         = "-fin";  // -i
+const char* FLAG_OUTPUT_FILE        = "-fout"; // -o
+const char* FLAG_PRINT_ADDRESS      = "-addr"; // --print-address
 const char* FLAG_SORT_FROM_BEGIN    = "-sb";
 const char* FLAG_SORT_FROM_END      = "-se";
 
