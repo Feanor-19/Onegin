@@ -20,7 +20,10 @@ int main(int argc, const char *argv[])
     }
 
     ErrorCodes err = ERROR_NO;
-    FileBuf file_buf = read_file_to_buf((!is_str_empty(cfg.data_source) ? cfg.data_source : "input.txt"), &err);
+    FileBuf file_buf = read_file_to_buf(
+        !is_str_empty(cfg.data_source) ? cfg.data_source : "input.txt",
+        &err
+    );
     if (err != ERROR_NO)
     {
         print_error_message(err);
